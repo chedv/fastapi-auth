@@ -28,7 +28,7 @@ def authenticate(db_session: Session, email: str, raw_password: str) -> Optional
     return None
 
 
-def create_access_token(user: models.User, expire_minutes: int = 30):
+def create_access_token(user: models.User, expire_minutes: int = 30) -> str:
     encode_data = {'sub': user.email, 'exp': datetime.now() + timedelta(minutes=expire_minutes)}
     return jwt.encode(encode_data, settings.jwt_secret, algorithm='HS256')
 
