@@ -5,6 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from ..dependencies import get_db_session
 from ..schemas import UserRegistration, UserLogin
 from ..database.users import create_user
+from ..utils.auth import authenticate, create_access_token
 
 
 auth_router = APIRouter(prefix='/auth', tags=['auth'])
@@ -22,5 +23,11 @@ def user_register(user: UserRegistration = Depends(UserRegistration.as_form),
 
 
 @auth_router.post('/login', status_code=status.HTTP_200_OK)
-def user_login(user: UserLogin = Depends(UserLogin.as_form)):
-    return {'access_token': '', 'token_type': 'bearer'}
+def user_login(user: UserLogin = Depends(UserLogin.as_form),
+               db_session: Session = Depends(get_db_session)):
+    user_model = authenticate(db_session, user.email, user.raw_password)
+    if not user_model:
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail='Invalid email or password')
+
+    acces_token = create_access_token(user_model)
+    return {'access_token': acces_token, 'token_type': 'bearer'}

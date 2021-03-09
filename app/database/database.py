@@ -5,9 +5,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from settings import settings as s
 
 
-connection_str = f'postgresql+psycopg2://{s.db_user}:{s.db_pwd}@{s.db_host}:{s.db_port}/{s.db_name}'
+connection_str = 'postgresql+psycopg2://{db_user}:{db_pwd}@{db_host}:{db_port}/{db_name}'
 
-db_engine = create_engine(connection_str, echo=s.db_echo)
+db_engine = create_engine(connection_str.format(**s.dict()), echo=s.db_echo)
 
 DBSession = sessionmaker(bind=db_engine, autocommit=False)
 

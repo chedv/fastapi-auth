@@ -8,33 +8,22 @@ from fastapi import Form
 def as_form(cls: Type[BaseModel]):
     new_parameters = []
 
-    for field_name, model_field in cls.__fields__.items():
-        model_field: ModelField
-
-        if not model_field.required:
-            new_parameters.append(
-                inspect.Parameter(
-                    model_field.alias,
-                    inspect.Parameter.POSITIONAL_ONLY,
-                    default=Form(model_field.default),
-                    annotation=model_field.outer_type_,
-                )
+    for field_name, field_model in cls.__fields__.items():
+        new_parameters.append(
+            inspect.Parameter(
+                field_model.alias,
+                inspect.Parameter.POSITIONAL_ONLY,
+                default=Form(...) if field_model.required else Form(field_model.default),
+                annotation=field_model.outer_type_,
             )
-        else:
-            new_parameters.append(
-                inspect.Parameter(
-                    model_field.alias,
-                    inspect.Parameter.POSITIONAL_ONLY,
-                    default=Form(...),
-                    annotation=model_field.outer_type_,
-                )
-            )
+        )
 
     async def as_form_func(**data):
         return cls(**data)
 
-    sig = inspect.signature(as_form_func)
-    sig = sig.replace(parameters=new_parameters)
-    as_form_func.__signature__ = sig
+    signature = inspect.signature(as_form_func)
+    signature = signature.replace(parameters=new_parameters)
+    as_form_func.__signature__ = signature
+
     setattr(cls, 'as_form', as_form_func)
     return cls

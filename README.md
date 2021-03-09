@@ -13,6 +13,16 @@ git clone https://github.com/chedv/fastapi-auth.git
 cd fastapi-auth
 ```
 
+Configure vscode settings.json:
+
+```json
+{
+    "python.pythonPath": "/path/to/project/.venv/bin/python3.8",
+    "python.linting.pylintEnabled": true,
+    "python.linting.pycodestyleEnabled": true
+}
+```
+
 Create virtual environment and install dependencies:
 
 ```shell script

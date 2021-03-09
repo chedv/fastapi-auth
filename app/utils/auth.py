@@ -38,4 +38,4 @@ def get_current_user(db_session: Session, token: str) -> Optional[models.User]:
     return users.get_user_by_email(db_session, decoded_data['email'])
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/login')

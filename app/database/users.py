@@ -3,11 +3,11 @@ from sqlalchemy.orm import Session
 
 from . import models
 from ..schemas import UserRegistration
-from .. import helpers
+from .. import utils
 
 
 def create_user(db_session: Session, user: UserRegistration, user_role: str) -> models.User:
-    hashed_password = helpers.PasswordContext.get_hashed_password(user.raw_password)
+    hashed_password = utils.PasswordContext.get_hashed_password(user.raw_password)
     user = models.User(**user.dict(exclude={'raw_password'}), hashed_password=hashed_password, role=user_role)
     db_session.add(user)
     db_session.commit()

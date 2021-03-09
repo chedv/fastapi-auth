@@ -18,6 +18,9 @@ pyjwt = "*"
 [dev-packages]
 pytest = "*"
 pytest-cov = "*"
+pylint = "*"
+pycodestyle = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"
