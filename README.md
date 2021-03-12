@@ -60,6 +60,12 @@ Generate JWT secret key:
 openssl rand -hex 32
 ```
 
+Apply migrations:
+
+```shell script
+alembic upgrade head
+```
+
 Run project:
 
 ```shell script
